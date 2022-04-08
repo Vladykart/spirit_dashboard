@@ -2,10 +2,19 @@ from dotenv import load_dotenv
 import pathlib
 import os
 
+
 ROOT_DIR = pathlib.Path.cwd().parent
 LOCAL_DATA_PATH = ROOT_DIR.joinpath("data")
 
 load_dotenv()
+
+
+MONGO_CREDENTIALS = {
+    "username": os.environ.get("MONGO_USERNAME"),
+    "password": os.environ.get("MONGO_PASSWORD"),
+    "host": "spirit-test.qhagm.mongodb.net",
+    "db": "spirit-test"
+}
 
 BC_CREDENTIALS = {
     "access_token": os.environ.get("ACCESS_TOKEN"),
@@ -16,16 +25,8 @@ BC_CREDENTIALS = {
     "store_hash": os.environ.get("STORE_HASH")
 }
 
-
-
 GAPI = {
     'key': os.environ.get("GAPI_KEY"),
     'unique_id': os.environ.get("UNIQUE_ID"),
     'key_file_location': ROOT_DIR.joinpath('GApi', 'spirit-api-339912-56d447179352.json')
 }
-
-print(BC_CREDENTIALS)
-
-
-
-
