@@ -1,15 +1,27 @@
 import streamlit as st
-import streamlit.components.v1 as components
 from st_aggrid import AgGrid
 import pandas as pd
 import numpy as np
-from pivottablejs import pivot_ui
-
 from data.get_data import get_unique_values_from_columns, get_data_from_collection
+from data.prepare_data import prepare_date_columns
+from apps.ui_elements.agrid.agrid_video import get_table, set_ggrid_options
+
+
+st.session_state.events_action = get_unique_values_from_columns('video', 'eventAction')
+
 
 
 def app():
     st.title('Video')
+    st.sidebar.subheader("St-AgGrid example options")
+    events_action_selector = st.multiselect(
+        'Select event actions',
+        st.session_state.events_action,
+        help='choose event action',
+        default='playing')
+
+
+
     select_rows = {'date':1,
                    'name':1,
                    'eventAction':1,
@@ -22,19 +34,21 @@ def app():
 
     date_from_input = st.date_input("Select from date")
     date_to_input = st.date_input("Select to date")
-    events_action = get_unique_values_from_columns('video', 'eventAction')
-    events_action_selector = st.multiselect(
-        'Select event actions',
-        events_action,
-        help='choose station or stations',
-        default='playing')
-    events_action_selector = [s for s in events_action_selector]
-    st.write("------------------------------")
+
     st.markdown("### Sample Data")
 
     df = get_data_from_collection('video', {'eventAction': {"$in": events_action_selector}}, select_rows)
-    # st.write(df)
-    AgGrid(df, theme='dark')
+    # df = prepare_date_columns(df)
+    gb = set_ggrid_options(df)
 
+    gridOptions = gb.build()
 
-    st.write('Navigate to `Data Stats` page to visualize the data')
+    with st.form('example form') as f:
+        st.spinner("Displaying results...")
+        st.header('Example Form')
+        grid_response = get_table(df, gridOptions)
+        # Infer basic colDefs from dataframe types
+        st.form_submit_button()
+    # st.markdown(grid_response['data'].to_html(), unsafe_allow_html=True)
+    st.write(gridOptions)
+    st.write(grid_response['data'])

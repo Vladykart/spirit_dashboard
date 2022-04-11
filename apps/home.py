@@ -2,9 +2,6 @@ import streamlit as st
 import streamlit.components.v1 as components
 import pandas as pd
 import numpy as np
-from pivottablejs import pivot_ui
-
-from data.get_data import get_unique_values_from_columns, get_data_from_collection
 
 
 def app():
