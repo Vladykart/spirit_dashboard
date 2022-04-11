@@ -6,9 +6,13 @@ from pivottablejs import pivot_ui
 from settings import AGRID_OPTIONSS
 
 
+if 'agrid_selected_theme' not in st.session_state:
+    st.session_state.agrid_selected_theme = "dark"
 
-st.session_state.agrid_selected_theme = "dark"
-st.session_state.agrid_options = AGRID_OPTIONSS
+if 'agrid_options' not in st.session_state:
+    st.session_state.agrid_options = AGRID_OPTIONSS
+
+
 
 def app():
     st.title('Settings')
