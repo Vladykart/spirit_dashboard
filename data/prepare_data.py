@@ -10,7 +10,7 @@ def prepare_date_columns(df):
 
 def group_data(df, by=None):
     if by:
-        return df.groupby(by=by)
+        return df.groupby(by=by).sum()
     else:
         return df
 

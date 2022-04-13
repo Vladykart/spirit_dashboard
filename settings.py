@@ -13,8 +13,8 @@ AGRID_OPTIONSS = {
     "fit_columns_on_grid_load": True,
     "allow_unsafe_jscode": True,
     "enable_enterprise_modules": True,
-    "height": 800,
-    "rows": 100
+    "height": 500,
+    "rows": 40
 }
 
 

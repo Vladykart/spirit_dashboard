@@ -13,19 +13,7 @@ client = get_mongodb_client()
 
 
 def get_data_from_collection(collection, query=None, column_filter=None):
-    # pipeline = [
-    #
-    #     {"$unwind": "$name"},
-    #     {"$group": {"_id": "$name", "count": {"$sum": 1}}},
-    #     {"$sort": SON([("count", -1), ("_id", -1)])}
-    # ]
-    # pipeline = [
-    #
-    #     {"$unwind": "$name"},
-    #     {"$group": {"_id": "$name", "count": {"$sum": 1}}},
-    #     {"$sort": SON([("count", -1), ("_id", -1)])}
-    # ]
-    # Make a query to the specific DB and Collection
+
     if query is None:
         query = {}
     if filter is None:
@@ -36,6 +24,10 @@ def get_data_from_collection(collection, query=None, column_filter=None):
     # Expand the cursor and construct the DataFrame
     df = pd.DataFrame(list(cursor))
     return df
+
+def get_weekly(collection):
+
+    pass
 
 
 def get_unique_values_from_columns(collection, column_name):

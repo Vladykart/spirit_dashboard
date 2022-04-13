@@ -5,7 +5,10 @@ import numpy as np
 
 
 def app():
-    st.title('Home')
+
+    st.image('https://spiritsnetwork.com/assets/imgs/icons/logo.svg', width=480)
+    st.title('spirits network')
+
 
     # select_rows = {'date': 1,
     #                'name': 1,

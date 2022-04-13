@@ -17,16 +17,16 @@ def set_ggrid_options(df):
     gb.configure_default_column(editable=True, groupable=True, value=True, enableRowGroup=True, aggFunc='sum')
     gb.configure_side_bar()
     gb.configure_grid_options(enableRangeSelection=True, domLayout='normal', )
-    gb.configure_column("group")
-    gb.configure_column("totalEvents", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], precision=2,
-                        aggFunc='sum')
-    gb.configure_column("uniqueEvents", type=["numericColumn", "numberColumnnumberColumnFilter", "customNumericFormat"], precision=1,
-                        aggFunc='count')
+    # gb.configure_column("group")
+    # gb.configure_column("totalEvents", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], precision=2,
+    #                     aggFunc='sum')
+    # gb.configure_column("uniqueEvents", type=["numericColumn", "numberColumnnumberColumnFilter", "customNumericFormat"], precision=1,
+    #                     aggFunc='count')
     gb.configure_column("date", type=["dateColumn"],
-                        aggFunc='count', rowGroup=True, hide=True, precision=3)
-
+                        rowGroup=False, hide=False, precision=0)
+    #
     gb.configure_column("name", type=["TextColumn"],
-                        aggFunc='sum', rowGroup=True, hide=True, precision=4)
+                        rowGroup=False, hide=False, precision=4)
 
     # gb.configure_columns(grid_options)
 
