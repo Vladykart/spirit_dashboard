@@ -8,15 +8,15 @@ from data.get_data import get_unique_values_from_columns, get_data_from_collecti
 from data.prepare_data import prepare_date_columns, group_data, aggregate_data
 from apps.ui_elements.agrid.agrid_video import get_table, set_ggrid_options
 
-st.session_state.events_action = 'playing'
-if 'events_action' in st.session_state:
-    st.session_state.events_action = get_unique_values_from_columns('video', 'eventAction')
+
 
 
 def app():
     st.title('Video')
     st.sidebar.subheader("St-AgGrid example options")
-
+    st.session_state.events_action = 'playing'
+    if 'events_action' in st.session_state:
+        st.session_state.events_action = get_unique_values_from_columns('video', 'eventAction')
 
 
 
