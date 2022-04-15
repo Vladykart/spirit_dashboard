@@ -1,16 +1,10 @@
 from bson import SON
 
 from mongo_utils.mongo_connection import get_mongodb_client
+
 import pandas as pd
-import streamlit as st
-import asyncio
-
-
-
-# Connect to MongoDB
 
 client = get_mongodb_client()
-
 
 def get_data_from_collection(collection, query=None, column_filter=None):
 
@@ -25,8 +19,8 @@ def get_data_from_collection(collection, query=None, column_filter=None):
     df = pd.DataFrame(list(cursor))
     return df
 
-def get_weekly(collection):
 
+def get_weekly(collection):
     pass
 
 

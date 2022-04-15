@@ -9,15 +9,9 @@ from data.prepare_data import prepare_date_columns, group_data, aggregate_data
 from apps.ui_elements.agrid.agrid_video import get_table, set_ggrid_options
 
 
-
-
 def app():
     st.title('Video')
     st.sidebar.subheader("St-AgGrid example options")
-    st.session_state.events_action = 'playing'
-    if 'events_action' in st.session_state:
-        st.session_state.events_action = get_unique_values_from_columns('video', 'eventAction')
-
 
 
     select_rows = {'date':1,
@@ -45,20 +39,17 @@ def app():
                                                 value=datetime.datetime(2022, 1, 1))
                 date_from_input = datetime.datetime.combine(date_from_input, datetime.time.min)
 
-
             with col2:
                 date_to_input = st.date_input("Select to date",
                                               max_value=datetime.datetime(2022,3,1),
                                               value=datetime.datetime(2022,3,1))
                 date_to_input = datetime.datetime.combine(date_to_input, datetime.time.min)
 
-
             with col3:
                 time_frame = st.selectbox(
                     "Select weekly or monthly downloads", ("weekly", "monthly", "daily"))
 
             st.form_submit_button()
-
 
     st.markdown("### Sample Data")
     query = {'eventAction': {"$in": events_action_selector},
@@ -67,33 +58,48 @@ def app():
                  "$lt": date_to_input
                 }
              }
+
     agg = {
-        'date': 'first',
-        # 'name': 'first',
         'totalEvents': 'sum',
         'uniqueEvents': 'sum',
         'eventValue': 'sum'}
+
     df = get_data_from_collection('video', query, select_rows)
+
+    df['day'] = df['date'].dt.isocalendar().day
+    df['week'] = df['date'].dt.isocalendar().week
+    df['month'] = df['date'].dt.month
+
     if time_frame == 'weekly':
-        df = df.groupby(['eventAction', df['date'].dt.isocalendar().week, 'name']).agg(agg)
+        df = df.groupby(['eventAction', 'week', 'name']).agg(agg)
 
     elif time_frame == 'daily':
-        df = df.groupby(['eventAction', df['date'].dt.day, 'name']).sum(agg)
+        df = df.groupby(['eventAction', 'day', 'name']).sum(agg)
 
     else:
-        df = df.groupby(['eventAction', df['date'].dt.month, 'name']).sum(agg)
+        df = df.groupby(['eventAction', 'month', 'name']).sum(agg)
+
     df = df.reset_index()
     # df = prepare_date_columns(df)
     gb = set_ggrid_options(df)
 
     gridOptions = gb.build()
 
-    with st.form('example form') as f:
-        st.spinner("Displaying results...")
-        st.header('Example Form')
-        grid_response = get_table(df, gridOptions)
-        # Infer basic colDefs from dataframe types
-        st.form_submit_button()
-    # st.markdown(grid_response['data'].to_html(), unsafe_allow_html=True)
-    # st.write(gridOptions)
-    st.write(grid_response['data'])
+    with st.container():
+        with st.form('example form') as f:
+            col4, col5 = st.columns([16, 9])
+            with col4:
+                st.spinner("Displaying results...")
+                st.header('Example Form')
+                grid_response = get_table(df, gridOptions)
+                st.bar_chart(df.groupby('week').sum())
+            with col5:
+                # Infer basic colDefs from dataframe types
+
+                st.write(df.groupby('week').sum())
+            st.form_submit_button()
+        # st.markdown(grid_response['data'].to_html(), unsafe_allow_html=True)
+        # st.write(gridOptions)
+
+
+
