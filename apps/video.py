@@ -87,6 +87,7 @@ def app():
     with st.container():
         with st.form('example form') as f:
             col4, col5 = st.columns([16, 9])
+            st.form_submit_button()
             with col4:
                 st.spinner("Displaying results...")
                 st.header('Example Form')
