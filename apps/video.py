@@ -13,7 +13,6 @@ def app():
     st.title('Video')
     st.sidebar.subheader("St-AgGrid example options")
 
-
     select_rows = {'date':1,
                    'name':1,
                    'eventAction':1,
@@ -48,7 +47,7 @@ def app():
             with col3:
                 time_frame = st.selectbox(
                     "Select weekly or monthly downloads", ("weekly", "monthly", "daily"))
-
+                st.form_submit_button()
             st.form_submit_button()
 
     st.markdown("### Sample Data")
@@ -91,7 +90,7 @@ def app():
             with col4:
                 st.spinner("Displaying results...")
                 st.header('Example Form')
-                grid_response = get_table(df, gridOptions)
+                # grid_response = get_table(df, gridOptions)
                 st.bar_chart(df.groupby('week').sum())
             with col5:
                 # Infer basic colDefs from dataframe types
