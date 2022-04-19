@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 import pathlib
 import os
-
+import streamlit as st
 
 ROOT_DIR = pathlib.Path.cwd().parent
 LOCAL_DATA_PATH = ROOT_DIR.joinpath("data")
@@ -16,7 +16,7 @@ AGRID_OPTIONSS = {
     "height": 500,
     "rows": 40
 }
-
+st.session_state.agrid_options = AGRID_OPTIONSS
 
 MONGO_CREDENTIALS = {
     "username": os.environ.get("MONGO_USERNAME"),
