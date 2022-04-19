@@ -44,6 +44,6 @@ def get_table(df, gridOptions):
         enable_enterprise_modules=st.session_state.agrid_options.get('enable_enterprise_modules'),
         height=st.session_state.agrid_options.get('height'),
         rows=st.session_state.agrid_options.get('rows'),
-        data_return_mode= DataReturnMode.FILTERED_AND_SORTED
+        data_return_mode=DataReturnMode.FILTERED_AND_SORTED
     )
     return agrid_table

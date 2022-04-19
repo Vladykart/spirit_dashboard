@@ -21,4 +21,7 @@ def app():
     st.session_state.agrid_selected_theme = agrid_selected_theme
     if "agrid_selected_theme" not in st.session_state:
         st.session_state.agrid_selected_theme = agrid_selected_theme
+
+    if 'agrid_options' not in st.session_state:
+        st.session_state.agrid_options = AGRID_OPTIONSS
     st.write('Navigate to `Data Stats` page to visualize the data')
