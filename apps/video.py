@@ -91,7 +91,7 @@ def app():
             with col4:
                 st.spinner("Displaying results...")
                 st.header('Example Form')
-                get_table(df, gridOptions)
+                grid_response = get_table(df, gridOptions)
                 st.bar_chart(df.groupby('week').sum())
             with col5:
                 # Infer basic colDefs from dataframe types
