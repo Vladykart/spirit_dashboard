@@ -13,7 +13,6 @@ if 'agrid_options' not in st.session_state:
     st.session_state.agrid_options = AGRID_OPTIONSS
 
 
-
 def app():
     st.title('Settings')
     agrid_available_themes = ["streamlit", "light", "dark", "blue", "fresh", "material"]

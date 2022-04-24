@@ -6,6 +6,7 @@ import pandas as pd
 
 client = get_mongodb_client()
 
+
 def get_data_from_collection(collection, query=None, column_filter=None):
 
     if query is None:
@@ -29,6 +30,7 @@ def get_unique_values_from_columns(collection, column_name):
     for testy in client[collection].find().distinct(column_name):
         values.append(testy)
     return values
+
 
 
 
