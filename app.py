@@ -18,12 +18,12 @@ if 'events_action' not in st.session_state:
 
 
 # Add all your application here
-
+app.add_app('Settings', session_settings.app)
 app.add_app("Home", home.app)
 app.add_app("Video", video.app)
 app.add_app("Orders", orders.app)
 app.add_app("Clients", orders.app)
-app.add_app('Settings', session_settings.app)
+
 
 # The main app
 app.run()
