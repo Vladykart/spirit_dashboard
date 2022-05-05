@@ -97,7 +97,7 @@ def app():
             # Infer basic colDefs from dataframe types
         for e in events_action_selector:
             with st.expander(e) as f:
-                col1, col2 = st.columns([16, 21])
+                col1, col2 = st.columns([21, 9])
                 data = top_events(df, e, date_from_input, date_to_input)
 
                 with col1:
