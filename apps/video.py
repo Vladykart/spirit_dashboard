@@ -108,5 +108,5 @@ def app():
                     namespace = data['name'].unique()
                     names = st.multiselect("Choose name to visualize", namespace, namespace[:10])
                     source = df[df.name.isin(names)]
-                    chart = get_chart(source, e, 'date', 'eventValue')
-                    st.altair_chart(chart, use_container_width=True)
+                chart = get_chart(source, e, 'date', 'eventValue')
+                st.altair_chart(chart, use_container_width=True)
