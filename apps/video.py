@@ -1,105 +1,112 @@
 import datetime
-
-import streamlit as st
-from st_aggrid import AgGrid
 import pandas as pd
-import numpy as np
-from data.get_data import get_unique_values_from_columns, get_data_from_collection
-from data.prepare_data import prepare_date_columns, group_data, aggregate_data
+import streamlit as st
+from data.prepare_data import top_events
 from apps.ui_elements.agrid.agrid_video import get_table, set_ggrid_options
+from apps.ui_elements.visualisations.charts import get_chart
+from data.get_data import get_data_from_collection
 
 
 def app():
-    st.title('Video')
+
+    st.title("Video")
     st.sidebar.subheader("St-AgGrid example options")
 
-    select_rows = {'date':1,
-                   'name':1,
-                   'eventAction':1,
-                   'hour':1,
-                   'totalEvents':1,
-                   'uniqueEvents':1,
-                   'eventValue':1,
-                   '_id': 0,
-                   }
+    select_rows = {
+        "date": 1,
+        "name": 1,
+        "eventAction": 1,
+        "hour": 1,
+        "totalEvents": 1,
+        "uniqueEvents": 1,
+        "eventValue": 1,
+        "_id": 0,
+    }
     with st.container():
-        st.write("This is inside the container")
-
-        with st.form(key='my_form'):
+        with st.form(key="my_form"):
             events_action_selector = st.multiselect(
-                'Select event actions',
+                "Select event actions",
                 st.session_state.events_action,
-                help='choose event action',
-                default='playing')
+                help="choose event action",
+                default=["playing", "seeked"],
+            )
             col1, col2, col3 = st.columns(3)
             with col1:
-                date_from_input = st.date_input("Select from date",
-                                                min_value=datetime.datetime(2022, 1, 1),
-                                                value=datetime.datetime(2022, 1, 1))
-                date_from_input = datetime.datetime.combine(date_from_input, datetime.time.min)
+                date_from_input = st.date_input(
+                    "Select from date",
+                    min_value=datetime.datetime(2022, 1, 1),
+                    value=datetime.datetime(2022, 1, 1),
+                )
+                date_from_input = datetime.datetime.combine(
+                    date_from_input, datetime.time.min
+                )
 
             with col2:
-                date_to_input = st.date_input("Select to date",
-                                              max_value=datetime.datetime(2022,3,1),
-                                              value=datetime.datetime(2022,3,1))
-                date_to_input = datetime.datetime.combine(date_to_input, datetime.time.min)
+                date_to_input = st.date_input(
+                    "Select to date",
+                    max_value=datetime.datetime(2022, 3, 1),
+                    value=datetime.datetime(2022, 3, 1),
+                )
+                date_to_input = datetime.datetime.combine(
+                    date_to_input, datetime.time.min
+                )
 
             with col3:
                 time_frame = st.selectbox(
-                    "Select weekly or monthly downloads", ("weekly", "monthly", "daily"))
+                    "Select agg period", ("weekly", "monthly", "daily")
+                )
 
-                st.form_submit_button()
+            st.form_submit_button()
 
     st.markdown("### Sample Data")
-    query = {'eventAction': {"$in": events_action_selector},
-             "date": {
-                 "$gte": date_from_input,
-                 "$lt": date_to_input
-                }
-             }
+    query = {
+        "eventAction": {"$in": events_action_selector},
+        "date": {"$gte": date_from_input, "$lt": date_to_input},
+    }
 
-    agg = {
-        'totalEvents': 'sum',
-        'uniqueEvents': 'sum',
-        'eventValue': 'sum'}
+    agg = {"totalEvents": "sum", "uniqueEvents": "sum", "eventValue": "sum"}
 
-    df = get_data_from_collection('video', query, select_rows)
+    df = get_data_from_collection("video", query, select_rows)
 
-    df['day'] = df['date'].dt.isocalendar().day
-    df['week'] = df['date'].dt.isocalendar().week
-    df['month'] = df['date'].dt.month
+    df["day"] = df["date"].dt.isocalendar().day
+    df["week"] = df["date"].dt.isocalendar().week
+    df["month"] = df["date"].dt.month
+    grid_df = df.copy()
+    # tops_df = top_events(df, events_action_selector, date_from_input, date_to_input)
+    if time_frame == "weekly":
+        grid_df = grid_df.groupby(["eventAction", "week", "name"]).agg(agg)
 
-    if time_frame == 'weekly':
-        df = df.groupby(['eventAction', 'week', 'name']).agg(agg)
-
-    elif time_frame == 'daily':
-        df = df.groupby(['eventAction', 'day', 'name']).sum(agg)
+    elif time_frame == "daily":
+        grid_df = grid_df.groupby(["eventAction", "day", "name"]).sum(agg)
 
     else:
-        df = df.groupby(['eventAction', 'month', 'name']).sum(agg)
+        grid_df = grid_df.groupby(["eventAction", "month", "name"]).sum(agg)
 
-    df = df.reset_index()
+    grid_df = grid_df.reset_index()
     # df = prepare_date_columns(df)
-    gb = set_ggrid_options(df)
+    gb = set_ggrid_options(grid_df)
 
     gridOptions = gb.build()
 
     with st.container():
-        with st.form('example form') as f:
-            col4, col5 = st.columns([16, 9])
-            st.form_submit_button()
-            with col4:
-                st.spinner("Displaying results...")
-                st.header('Example Form')
-                grid_response = get_table(df, gridOptions)
-                st.bar_chart(df.groupby('week').sum())
-            with col5:
-                # Infer basic colDefs from dataframe types
+        with st.container() as f:
+            st.spinner("Displaying results...")
+            st.header("Example Form")
+            grid_response = get_table(df, gridOptions)
 
-                st.write(df.groupby('week').sum())
-                st.form_submit_button()
-        # st.markdown(grid_response['data'].to_html(), unsafe_allow_html=True)
-        # st.write(gridOptions)
+            # Infer basic colDefs from dataframe types
+        for e in events_action_selector:
+            with st.expander(e) as f:
+                col1, col2 = st.columns([16, 21])
+                data = top_events(df, e, date_from_input, date_to_input)
 
-
-
+                with col1:
+                    st.subheader(f"Top {e} events")
+                    total = data.groupby('name').sum()
+                    st.write(total)
+                with col2:
+                    namespace = data['name'].unique()
+                    names = st.multiselect("Choose name to visualize", namespace, namespace[:10])
+                    source = df[df.name.isin(names)]
+                    chart = get_chart(source, e, 'date', 'eventValue')
+                    st.altair_chart(chart, use_container_width=True)
