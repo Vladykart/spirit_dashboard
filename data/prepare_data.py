@@ -21,7 +21,7 @@ def aggregate_data(df, method=None):
     return df
 
 
-def top_events(data, event, start_date, end_date, top_n = 10):
+def top_events(data, event, start_date, end_date):
     agg = {"totalEvents": "sum", "uniqueEvents": "sum", "eventValue": "sum"}
     if type(start_date) == str:
         start_date = datetime.strptime(start_date, "%Y-%m-%d")
@@ -31,6 +31,6 @@ def top_events(data, event, start_date, end_date, top_n = 10):
     df["date"] = pd.to_datetime(df["date"])
     df = df[df["eventAction"] == event].groupby(["name", "date"]).agg(agg).reset_index()
     df = df.sort_values(by=["eventValue"], ascending=False).reset_index(drop=True)
-    return df.iloc[:top_n, :]
+    return df
 
 

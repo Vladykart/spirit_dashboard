@@ -96,17 +96,34 @@ def app():
 
             # Infer basic colDefs from dataframe types
         for e in events_action_selector:
+            data = (
+                top_events(df[df['eventAction'] == e], e, date_from_input, date_to_input)
+                .sort_values(["eventValue"], ascending=False)
+                .reset_index(drop=True)
+            )
+            total = (
+                data.groupby("name")
+                .sum()
+                .reset_index()
+                .sort_values(["eventValue"], ascending=False)
+                .reset_index(drop=True)
+            )
+            namespace = total["name"].unique()
+
             with st.expander(e) as f:
                 col1, col2 = st.columns([21, 9])
-                data = top_events(df, e, date_from_input, date_to_input)
 
                 with col1:
                     st.subheader(f"Top {e} events")
-                    total = data.groupby('name').sum()
-                    st.write(total)
+                    df_to_wiz = total.iloc[:11, :]
+                    st.write(df_to_wiz)
                 with col2:
-                    namespace = data['name'].unique()
-                    names = st.multiselect("Choose name to visualize", namespace, namespace[:10])
-                    source = df[df.name.isin(names)]
-                chart = get_chart(source, e, 'date', 'eventValue')
+                    names = st.multiselect(
+                        "Choose name to visualize", df_to_wiz["name"].unique(), df_to_wiz["name"].unique()[:11]
+                    )
+                    source = df[(df['eventAction'] == e) & (df.name.isin(names))].sort_values(
+                        ["eventValue"], ascending=False
+                    )
+
+                    chart = get_chart(source, e, "date", "eventValue")
                 st.altair_chart(chart, use_container_width=True)
