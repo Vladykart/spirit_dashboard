@@ -30,16 +30,16 @@ def app():
     df['hour'] = df.date_created.dt.hour
     df['minute'] = df.date_created.dt.minute
 
-    # df[['day', 'month', 'year', 'weekday', 'hour', 'minute']] = df[['day', 'month', 'year', 'weekday', 'hour', 'minute']].astype(int)
-    # with st.container():
-    #     st.write("This is inside the container")
-    #
-    #     with st.form(key='my_form'):
-    #         events_action_selector = st.multiselect(
-    #             'Select event actions',
-    #             st.session_state.events_action,
-    #             help='choose event action',
-    #             default='playing')
+    namespace = df['name'].unique()
+    with st.container():
+        st.write("This is inside the container")
+
+        with st.form(key='orders_form'):
+            events_action_selector = st.multiselect(
+                'Select event actions',
+                namespace,
+                help='choose event action',
+                default=namespace)
     #         col1, col2, col3 = st.columns(3)
     #         with col1:
     #             date_from_input = st.date_input("Select from date",

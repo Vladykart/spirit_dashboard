@@ -29,13 +29,15 @@ authenticator = stauth.Authenticate(
     "some_signature_key",
     cookie_expiry_days=30,
 )
-stx.bouncing_image(
-    image_source="https://spiritsnetwork.com/assets/imgs/icons/logo.svg",
-    animate=False,
-    animation_time=1500,
-    width=480,
-    height=200,
-)
+
+if authenticator:
+    stx.bouncing_image(
+        image_source="https://spiritsnetwork.com/assets/imgs/icons/logo.svg",
+        animate=False,
+        animation_time=1500,
+        width=480,
+        height=200,
+    )
 
 name, authentication_status, username = authenticator.login("Login", "main")
 
@@ -48,7 +50,6 @@ if st.session_state["authentication_status"]:
         st.session_state.events_action = get_data.get_unique_values_from_columns(
             "video", "eventAction"
         )
-
     # Add all your application here
     app.add_app("Settings", session_settings.app)
     app.add_app("Home", home.app)
