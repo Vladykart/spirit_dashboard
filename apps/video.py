@@ -48,7 +48,7 @@ def app():
                 time_frame = st.selectbox(
                     "Select weekly or monthly downloads", ("weekly", "monthly", "daily"))
 
-                st.form_submit_button()
+                st.form_submit_button('Submit')
 
     st.markdown("### Sample Data")
     query = {'eventAction': {"$in": events_action_selector},
@@ -97,7 +97,7 @@ def app():
                 # Infer basic colDefs from dataframe types
 
                 st.write(df.groupby('week').sum())
-                st.form_submit_button()
+            st.form_submit_button('ok')
         # st.markdown(grid_response['data'].to_html(), unsafe_allow_html=True)
         # st.write(gridOptions)
 

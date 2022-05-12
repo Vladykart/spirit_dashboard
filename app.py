@@ -20,7 +20,8 @@ usernames = ["spirits", "rbriggs"]
 passwords = ["spirits", "456"]
 
 hashed_passwords = stauth.Hasher(passwords).generate()
-
+st.write(get_unique_values_from_columns(
+            "video", "eventAction"))
 authenticator = stauth.Authenticate(
     names,
     usernames,
