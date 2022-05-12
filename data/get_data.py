@@ -1,5 +1,3 @@
-from bson import SON
-
 from mongo_utils.mongo_connection import get_mongodb_client
 
 import pandas as pd
