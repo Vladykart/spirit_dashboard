@@ -1,6 +1,6 @@
 import streamlit as st
 
-from data import get_data
+# from data import get_data
 from multiapp import MultiApp
 from apps import session_settings
 from apps import home
@@ -47,7 +47,7 @@ if st.session_state["authentication_status"]:
     st.write("Welcome *%s*" % (st.session_state["name"]))
     st.title("Some content")
     if "events_action" not in st.session_state:
-        st.session_state.events_action = get_data.get_unique_values_from_columns(
+        st.session_state.events_action = get_unique_values_from_columns(
             "video", "eventAction"
         )
     # Add all your application here
