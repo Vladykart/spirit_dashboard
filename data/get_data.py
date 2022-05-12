@@ -26,6 +26,7 @@ def get_weekly(collection):
 def get_unique_values_from_columns(collection, column_name):
     values = []
     for testy in client[collection].find().distinct(column_name):
+        print(testy)
         values.append(testy)
     return values
 
