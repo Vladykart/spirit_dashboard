@@ -6,6 +6,8 @@ import pandas as pd
 import numpy as np
 from data.get_data import get_unique_values_from_columns, get_data_from_collection
 from data.prepare_data import prepare_date_columns, group_data, aggregate_data
+from apps.ui_elements.visualisations.charts import get_chart
+from data.prepare_data import top_events
 from apps.ui_elements.agrid.agrid_video import get_table, set_ggrid_options
 
 
@@ -68,15 +70,15 @@ def app():
     df['day'] = df['date'].dt.isocalendar().day
     df['week'] = df['date'].dt.isocalendar().week
     df['month'] = df['date'].dt.month
-
+    grid_df = df.copy()
     if time_frame == 'weekly':
-        df = df.groupby(['eventAction', 'week', 'name']).agg(agg)
+        grid_df = df.groupby(['eventAction', 'week', 'name']).agg(agg)
 
     elif time_frame == 'daily':
-        df = df.groupby(['eventAction', 'day', 'name']).sum(agg)
+        grid_df = df.groupby(['eventAction', 'day', 'name']).sum(agg)
 
     else:
-        df = df.groupby(['eventAction', 'month', 'name']).sum(agg)
+        grid_df = df.groupby(['eventAction', 'month', 'name']).sum(agg)
 
     df = df.reset_index()
     # df = prepare_date_columns(df)
@@ -85,21 +87,44 @@ def app():
     gridOptions = gb.build()
 
     with st.container():
-        with st.form('example form') as f:
-            col4, col5 = st.columns([16, 9])
-            st.form_submit_button()
-            with col4:
-                st.spinner("Displaying results...")
-                st.header('Example Form')
-                grid_response = get_table(df, gridOptions)
-                st.bar_chart(df.groupby('week').sum())
-            with col5:
-                # Infer basic colDefs from dataframe types
+        with st.container() as f:
+            st.spinner("Displaying results...")
+            st.header("Example Form")
+            grid_response = get_table(df, gridOptions)
 
-                st.write(df.groupby('week').sum())
-            st.form_submit_button('ok')
-        # st.markdown(grid_response['data'].to_html(), unsafe_allow_html=True)
-        # st.write(gridOptions)
+            # Infer basic colDefs from dataframe types
+        for e in events_action_selector:
+            data = (
+                top_events(df[df['eventAction'] == e], e, date_from_input, date_to_input)
+                    .sort_values(["eventValue"], ascending=False)
+                    .reset_index(drop=True)
+            )
+            total = (
+                data.groupby("name")
+                    .sum()
+                    .reset_index()
+                    .sort_values(["eventValue"], ascending=False)
+                    .reset_index(drop=True)
+            )
+            namespace = total["name"].unique()
+
+            with st.expander(e) as f:
+                col1, col2 = st.columns([21, 9])
+
+                with col1:
+                    st.subheader(f"Top {e} events")
+                    df_to_wiz = total.iloc[:11, :]
+                    st.write(df_to_wiz)
+                with col2:
+                    names = st.multiselect(
+                        "Choose name to visualize", df_to_wiz["name"].unique(), df_to_wiz["name"].unique()[:11]
+                    )
+                    source = df[(df['eventAction'] == e) & (df.name.isin(names))].sort_values(
+                        ["eventValue"], ascending=False
+                    )
+
+                    chart = get_chart(source, e, "date", "eventValue")
+                st.altair_chart(chart, use_container_width=True)
 
 
 
