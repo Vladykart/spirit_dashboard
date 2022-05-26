@@ -1,10 +1,10 @@
-import pandas as pd
 from datetime import datetime
+
+import pandas as pd
 
 
 def prepare_date_columns(df):
-    df['date'] = pd.to_datetime(
-        df['date'], format='%Y%m%d')
+    df["date"] = pd.to_datetime(df["date"], format="%Y%m%d")
 
     return df
 
@@ -29,8 +29,11 @@ def top_events(data, event, start_date, end_date):
         end_date = datetime.strptime(end_date, "%Y-%m-%d")
     df = data.copy()
     df["date"] = pd.to_datetime(df["date"])
-    df = df[df["eventAction"] == event].groupby(["name", "date"]).agg(agg).reset_index()
+    df = (
+        df[df["eventAction"] == event]
+        .groupby(by=["name", "date"])
+        .agg(agg)
+        .reset_index()
+    )
     df = df.sort_values(by=["eventValue"], ascending=False).reset_index(drop=True)
     return df
-
-

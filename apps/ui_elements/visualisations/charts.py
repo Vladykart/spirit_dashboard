@@ -11,10 +11,10 @@ def get_chart(data, title=None, x_axis=None, y_axis=None):
 
     lines = (
         alt.Chart(data, title=title)
-        .mark_line()
+        .mark_bar()
         .encode(
-            x='date:T',
-            y='eventValue:Q',
+            x='monthdate(date):T',
+            y='uniqueEvents:Q',
             color='name',
             strokeDash='name',
         )
@@ -28,12 +28,12 @@ def get_chart(data, title=None, x_axis=None, y_axis=None):
         alt.Chart(data)
         .mark_rule()
         .encode(
-            x='date:T',
-            y='eventValue:Q',
+            x='monthdate(date):T',
+            y='uniqueEvents:Q',
             opacity=alt.condition(hover, alt.value(0.3), alt.value(0)),
             tooltip=[
                 alt.Tooltip('date', title=x_axis),
-                alt.Tooltip('eventValue', title=y_axis),
+                alt.Tooltip('uniqueEvents', title=y_axis),
             ],
         )
         .add_selection(hover)
