@@ -56,7 +56,7 @@ if st.session_state["authentication_status"]:
     app.add_app("Home", home.app)
     app.add_app("Video", video.app)
     app.add_app("Orders", orders.app)
-    app.add_app("Clients", orders.app)
+    app.add_app("Clients", clients.app)
 
     # The main app
     app.run()

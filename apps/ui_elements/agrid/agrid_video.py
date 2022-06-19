@@ -16,8 +16,8 @@ def set_ggrid_options(df):
     gb = GridOptionsBuilder.from_dataframe(df)
     gb.configure_default_column(editable=True, groupable=True, value=True, enableRowGroup=True, aggFunc='sum')
     gb.configure_side_bar()
-    gb.configure_grid_options(enableRangeSelection=True, domLayout='normal', )
-    # gb.configure_column("group")
+    gb.configure_grid_options(enableRangeSelection=True, domLayout='normal', autoSizeAllColumns=True)
+    gb.configure_columns("autoSizeAllColumns={skipHeader?: False}")
     # gb.configure_column("totalEvents", type=["numericColumn", "numberColumnFilter", "customNumericFormat"], precision=2,
     #                     aggFunc='sum')
     # gb.configure_column("uniqueEvents", type=["numericColumn", "numberColumnnumberColumnFilter", "customNumericFormat"], precision=1,
