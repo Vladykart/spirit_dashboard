@@ -16,8 +16,8 @@ st.write(
 )
 
 st.write(
-    "To view Products usage from BIGCOMMERCE, click The [Products]("
-    "https://share.streamlit.io/vladykart/spirit_dashboard/home.py/products) button on the sidebar "
+    "To view Orders usage from BIGCOMMERCE, click The [Orders]("
+    "https://share.streamlit.io/vladykart/spirit_dashboard/home.py/orders) button on the sidebar "
     "menu on "
     "the "
     "left "

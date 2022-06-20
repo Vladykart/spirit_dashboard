@@ -31,8 +31,6 @@ if "agrid_options" not in st.session_state:
     st.session_state.agrid_options = AGRID_OPTIONSS
 
 
-st.sidebar.subheader("St-AgGrid example options")
-
 select_rows = {
     "date": 1,
     "name": 1,
