@@ -20,6 +20,6 @@ if 'agrid_options' not in st.session_state:
     st.session_state.agrid_options = AGRID_OPTIONSS
 
 
-st.write('To view Video usage from Google Analysis, click The [Video]({/video}) button on the sidebar menu on the '
+st.write('To view Video usage from Google Analysis, click The [Video]({https://share.streamlit.io/vladykart/spirit_dashboard/home.py}) button on the sidebar menu on the '
          'left ')
 
