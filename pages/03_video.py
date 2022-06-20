@@ -10,9 +10,10 @@ from data.prepare_data import top_events
 from apps.ui_elements.agrid.agrid_video import get_table, set_ggrid_options
 from settings import AGRID_OPTIONSS
 
+st.set_page_config(page_title="Video", layout="wide")
 st.markdown("# Video")
 st.sidebar.markdown("# Video")
-st.set_page_config(page_title="Video", layout="wide")
+
 
 if "agrid_selected_theme" not in st.session_state:
     st.session_state.agrid_selected_theme = "dark"
