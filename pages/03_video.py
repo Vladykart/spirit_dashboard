@@ -8,9 +8,25 @@ from data.prepare_data import prepare_date_columns, group_data, aggregate_data
 from apps.ui_elements.visualisations.charts import get_chart
 from data.prepare_data import top_events
 from apps.ui_elements.agrid.agrid_video import get_table, set_ggrid_options
+from settings import AGRID_OPTIONSS
 
 st.markdown("# Video")
 st.sidebar.markdown("# Video")
+
+if 'agrid_selected_theme' not in st.session_state:
+    st.session_state.agrid_selected_theme = "dark"
+
+if 'agrid_options' not in st.session_state:
+    st.session_state.agrid_options = AGRID_OPTIONSS
+
+agrid_available_themes = ["streamlit", "light", "dark", "blue", "fresh", "material"]
+agrid_selected_theme = st.selectbox("Theme", agrid_available_themes, index=2)
+st.session_state.agrid_selected_theme = agrid_selected_theme
+if "agrid_selected_theme" not in st.session_state:
+    st.session_state.agrid_selected_theme = agrid_selected_theme
+
+if 'agrid_options' not in st.session_state:
+    st.session_state.agrid_options = AGRID_OPTIONSS
 
 
 st.sidebar.subheader("St-AgGrid example options")
