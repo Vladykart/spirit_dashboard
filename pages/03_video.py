@@ -12,20 +12,21 @@ from settings import AGRID_OPTIONSS
 
 st.markdown("# Video")
 st.sidebar.markdown("# Video")
+st.set_page_config(page_title="Video", layout="wide")
 
-if 'agrid_selected_theme' not in st.session_state:
+if "agrid_selected_theme" not in st.session_state:
     st.session_state.agrid_selected_theme = "dark"
 
-if 'agrid_options' not in st.session_state:
+if "agrid_options" not in st.session_state:
     st.session_state.agrid_options = AGRID_OPTIONSS
 
 agrid_available_themes = ["streamlit", "light", "dark", "blue", "fresh", "material"]
-agrid_selected_theme = st.selectbox("Theme", agrid_available_themes, index=2)
+agrid_selected_theme = st.sidebar.selectbox("Theme", agrid_available_themes, index=2)
 st.session_state.agrid_selected_theme = agrid_selected_theme
 if "agrid_selected_theme" not in st.session_state:
     st.session_state.agrid_selected_theme = agrid_selected_theme
 
-if 'agrid_options' not in st.session_state:
+if "agrid_options" not in st.session_state:
     st.session_state.agrid_options = AGRID_OPTIONSS
 
 
@@ -73,9 +74,7 @@ with st.container():
                 max_value=datetime.datetime(2022, 3, 1),
                 value=datetime.datetime(2022, 3, 1),
             )
-            date_to_input = datetime.datetime.combine(
-                date_to_input, datetime.time.min
-            )
+            date_to_input = datetime.datetime.combine(date_to_input, datetime.time.min)
 
         with col3:
             time_frame = st.selectbox(
@@ -122,9 +121,7 @@ with st.container():
         # Infer basic colDefs from dataframe types
     for e in events_action_selector:
         data = (
-            top_events(
-                df[df["eventAction"] == e], e, date_from_input, date_to_input
-            )
+            top_events(df[df["eventAction"] == e], e, date_from_input, date_to_input)
             .sort_values(["eventValue"], ascending=False)
             .reset_index(drop=True)
         )
@@ -151,19 +148,21 @@ with st.container():
 
             st.write(df_to_wiz)
             dff = df.copy()
-            agg = {
-                   'uniqueEvents': 'sum',
-                   'totalEvents': 'sum',
-                   'eventValue': 'sum'}
-            dff['date'] = pd.to_datetime(dff['date'].astype(str) + ' ' + dff['hour'].astype(str),
-                                         format='%Y-%M-%d %H')
-            gdf = dff[(dff["eventAction"] == e)].groupby(['date', 'eventAction', 'name']).agg(agg).reset_index()
-
+            agg = {"uniqueEvents": "sum", "totalEvents": "sum", "eventValue": "sum"}
+            dff["date"] = pd.to_datetime(
+                dff["date"].astype(str) + " " + dff["hour"].astype(str),
+                format="%Y-%M-%d %H",
+            )
+            gdf = (
+                dff[(dff["eventAction"] == e)]
+                .groupby(["date", "eventAction", "name"])
+                .agg(agg)
+                .reset_index()
+            )
 
             source = gdf[
-                (gdf["eventAction"] == e) & (gdf['name'].isin(st.session_state.names))
+                (gdf["eventAction"] == e) & (gdf["name"].isin(st.session_state.names))
             ].sort_values(["eventValue"], ascending=False)
-
 
             # source = source.groupby(['date', 'hour', 'eventAction']).agg(agg)
             chart = get_chart(source, e, "date", "uniqueEvents")
