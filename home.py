@@ -5,6 +5,8 @@ from settings import AGRID_OPTIONSS
 
 st.set_page_config(page_title="Spirit", layout="wide")
 
+st.markdown("# Home")
+st.sidebar.markdown("# Home")
 
 st.write(
     "To view Video usage from Google Analysis, click The [Video]("
