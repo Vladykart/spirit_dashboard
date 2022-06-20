@@ -4,7 +4,13 @@ import extra_streamlit_components as stx
 from settings import AGRID_OPTIONSS
 
 st.set_page_config(page_title="Spirit", layout="wide")
-
+stx.bouncing_image(
+    image_source="https://spiritsnetwork.com/assets/imgs/icons/logo.svg",
+    animate=False,
+    animation_time=1500,
+    width=480,
+    height=200,
+)
 st.markdown("# Home")
 st.sidebar.markdown("# Home")
 
