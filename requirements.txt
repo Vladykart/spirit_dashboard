@@ -89,7 +89,7 @@ six==1.16.0
 smmap==5.0.0
 soupsieve==2.3.2
 stack-data==0.2.0
-streamlit==1.8.1
+streamlit
 streamlit-aggrid==0.2.3.post2
 streamlit-authenticator==0.1.4
 terminado==0.13.3
@@ -109,3 +109,4 @@ wcwidth==0.2.5
 webencodings==0.5.1
 widgetsnbextension==3.6.0
 zipp==3.8.0
+plotly

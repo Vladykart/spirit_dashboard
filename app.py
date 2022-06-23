@@ -51,12 +51,12 @@ if st.session_state["authentication_status"]:
         st.session_state.events_action = get_unique_values_from_columns(
             "video", "eventAction"
         )
-    # Add all your application here
-    app.add_app("Settings", session_settings.app)
-    app.add_app("Home", home.app)
-    app.add_app("Video", video.app)
-    app.add_app("Orders", orders.app)
-    app.add_app("Clients", clients.app)
+    # # Add all your application here
+    # app.add_app("Settings", session_settings.app)
+    # app.add_app("Home", home.app)
+    # app.add_app("Video", video.app)
+    # app.add_app("Orders", orders.app)
+    # app.add_app("Clients", orders.app)
 
     # The main app
     app.run()
