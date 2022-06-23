@@ -77,14 +77,29 @@ def app():
     df["week"] = df["date"].dt.isocalendar().week
     df["month"] = df["date"].dt.month
     grid_df = df.copy()
-    if time_frame == "weekly":
-        grid_df = df.groupby(["eventAction", "week", "name"]).agg(agg)
 
-    elif time_frame == "daily":
-        grid_df = df.groupby(["eventAction", "day", "name"]).agg(agg)
+    def time_frame_cases(time_frame, df):
+        match time_frame:
+            case "load", time_frame:
+                grid_df = df.groupby(["eventAction", "week", "name"]).agg(agg)
 
-    else:
-        grid_df = df.groupby(["eventAction", "month", "name"]).agg(agg)
+            case "daily", time_frame:
+                grid_df = df.groupby(["eventAction", "day", "name"]).agg(agg)
+
+            case _:
+                grid_df = df.groupby(["eventAction", "month", "name"]).agg(agg)
+
+        return grid_df
+    grid_df = time_frame_cases(time_frame, df)
+    #
+    # if time_frame == "weekly":
+    #     grid_df = df.groupby(["eventAction", "week", "name"]).agg(agg)
+    #
+    # elif time_frame == "daily":
+    #     grid_df = df.groupby(["eventAction", "day", "name"]).agg(agg)
+    #
+    # else:
+    #     grid_df = df.groupby(["eventAction", "month", "name"]).agg(agg)
 
     df = df.reset_index()
     # df = prepare_date_columns(df)
