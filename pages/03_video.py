@@ -14,7 +14,6 @@ st.set_page_config(page_title="Video", layout="wide")
 st.markdown("# Video")
 st.sidebar.markdown("# Video")
 
-
 if "agrid_selected_theme" not in st.session_state:
     st.session_state.agrid_selected_theme = "dark"
 
@@ -47,7 +46,7 @@ if "events_action" not in st.session_state:
     )
 
 with st.container():
-    st.write("This is inside the container")
+    # st.write("This is inside the container")
 
     with st.form(key="my_form"):
         events_action_selector = st.multiselect(
@@ -82,7 +81,7 @@ with st.container():
 
             st.form_submit_button("Submit")
 
-st.markdown("### Sample Data")
+st.markdown("### Data Sample")
 query = {
     "eventAction": {"$in": events_action_selector},
     "date": {"$gte": date_from_input, "$lt": date_to_input},
@@ -114,7 +113,7 @@ gridOptions = gb.build()
 with st.container():
     with st.container() as f:
         st.spinner("Displaying results...")
-        st.header("Example Form")
+        st.header("Result: ")
         grid_response = get_table(df, gridOptions)
 
         # Infer basic colDefs from dataframe types

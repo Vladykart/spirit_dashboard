@@ -78,18 +78,17 @@ def app():
     df["month"] = df["date"].dt.month
     grid_df = df.copy()
 
-    def time_frame_cases(time_frame, df):
+    def time_frame_cases(time_frame, grid_df):
         match time_frame:
             case "load", time_frame:
-                grid_df = df.groupby(["eventAction", "week", "name"]).agg(agg)
+                return df.groupby(["eventAction", "week", "name"]).agg(agg)
 
             case "daily", time_frame:
-                grid_df = df.groupby(["eventAction", "day", "name"]).agg(agg)
+                return df.groupby(["eventAction", "day", "name"]).agg(agg)
 
             case _:
-                grid_df = df.groupby(["eventAction", "month", "name"]).agg(agg)
+                return df.groupby(["eventAction", "month", "name"]).agg(agg)
 
-        return grid_df
     grid_df = time_frame_cases(time_frame, df)
     #
     # if time_frame == "weekly":

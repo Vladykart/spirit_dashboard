@@ -62,25 +62,33 @@ yearly_agg = aggregate_yearly(df)
 
 df1 = (
     df[["date_created", "month_created_str", "day_created", "_id"]]
-    .groupby(["date_created", "month_created_str", "day_created"])
-    .count()
-    .reset_index()
-    .rename(columns={"_id": "count"})
+        .groupby(["date_created", "month_created_str", "day_created"])
+        .count()
+        .reset_index()
+        .rename(columns={"_id": "count"})
 )
 
 df1 = df1[["month_created_str", "day_created", "count"]].set_index("day_created")
-
-
+df1 = df1.rename(columns={"month_created_str": "month"})
+df_g = df1.groupby('month').sum()
 fig = px.bar(
     df1,
-    facet_col="month_created_str",
+    facet_col="month",
     facet_col_wrap=3,
     color_discrete_sequence=px.colors.sequential.Burg_r,
-    height= 750
+    labels=True,
+    height=750,
+    # text='month_created_str'
 )
+fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
+# fig.for_each_annotation(lambda a: a.update(text=a.text + df_g[df_g.index == a]))
+
+
 
 st.plotly_chart(fig, use_container_width=True)
 
+
+st.table(df1.groupby('month').sum())
 # df = prepare_date_columns(df)
 gb = set_ggrid_options(df)
 
