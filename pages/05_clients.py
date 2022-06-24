@@ -81,7 +81,7 @@ fig = px.bar(
     # text='month_created_str'
 )
 fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
-# fig.for_each_annotation(lambda a: a.update(text=a.text + df_g[df_g.index == a]))
+# fig.for_each_annotation(lambda a: a.update(text=a.text + str(df_g.iloc[a.text]['count'])))
 
 
 

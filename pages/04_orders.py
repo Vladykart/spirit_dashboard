@@ -51,7 +51,7 @@ df["minute"] = df.date_created.dt.minute
 
 namespace = df["name"].unique()
 with st.container():
-    st.write("This is inside the container")
+    # st.write("This is inside the container")
 
     with st.expander("Products selection") as f:
         events_action_selector = st.multiselect(

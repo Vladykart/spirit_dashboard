@@ -81,7 +81,7 @@ with st.container():
 
             st.form_submit_button("Submit")
 
-st.markdown("### Data Sample")
+# st.markdown("### Data Sample")
 query = {
     "eventAction": {"$in": events_action_selector},
     "date": {"$gte": date_from_input, "$lt": date_to_input},
