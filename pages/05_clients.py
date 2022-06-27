@@ -25,7 +25,7 @@ def parse_date_created(df):
     df["weekday_created"] = df["date_created"].dt.weekday
     df["hour_created"] = df["date_created"].dt.hour
     df["day_of_year_created"] = df["date_created"].dt.dayofyear
-    df["month_created_str"] = df["date_created"].dt.strftime("%b")
+    df["month_created_str"] = df["date_created"].dt.strftime("%B")
 
     df["date_created"] = df["date_created"].dt.date
 
@@ -61,16 +61,21 @@ monthly_agg = aggregate_monthly(df)
 yearly_agg = aggregate_yearly(df)
 
 df1 = (
-    df[["date_created", "month_created_str", "day_created", "_id"]]
-        .groupby(["date_created", "month_created_str", "day_created"])
+    df[["date_created", "month_created_str", "day_created", "_id", 'year_created']]
+        .groupby(['year_created', "date_created", "month_created_str", "day_created"])
         .count()
         .reset_index()
         .rename(columns={"_id": "count"})
 )
 
-df1 = df1[["month_created_str", "day_created", "count"]].set_index("day_created")
+df1 = df1[["month_created_str", "day_created", "count", "year_created"]].set_index("day_created")
 df1 = df1.rename(columns={"month_created_str": "month"})
 df_g = df1.groupby('month').sum()
+df_g = df_g.reset_index()
+df1['m_c'] = df1.groupby(['year_created', 'month'])['count'].transform(np.sum)
+df1['month'] = 'total by ' + df1['month'] + ' ' + df1['year_created'].astype(str) + ': '+ df1['m_c'].astype(str)
+df1 = df1.drop(columns=['m_c', 'year_created'])
+
 fig = px.bar(
     df1,
     facet_col="month",
@@ -88,7 +93,7 @@ fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
 st.plotly_chart(fig, use_container_width=True)
 
 
-st.table(df1.groupby('month').sum())
+# st.table(df1.groupby('month').sum())
 # df = prepare_date_columns(df)
 gb = set_ggrid_options(df)
 
