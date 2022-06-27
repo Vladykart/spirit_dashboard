@@ -73,7 +73,7 @@ df1 = df1.rename(columns={"month_created_str": "month"})
 df_g = df1.groupby('month').sum()
 df_g = df_g.reset_index()
 df1['m_c'] = df1.groupby(['year_created', 'month'])['count'].transform(np.sum)
-df1['month'] = 'total by ' + df1['month'] + ' ' + df1['year_created'].astype(str) + ': '+ df1['m_c'].astype(str)
+df1['month'] = df1['year_created'].astype(str) + " " + df1['month'] + ' total: ' + '(' + df1['m_c'].astype(str) + ")"
 df1 = df1.drop(columns=['m_c', 'year_created'])
 
 fig = px.bar(
