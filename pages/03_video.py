@@ -35,6 +35,7 @@ select_rows = {
     "name": 1,
     "eventAction": 1,
     "hour": 1,
+    "customUserID": 1,
     "totalEvents": 1,
     "uniqueEvents": 1,
     "eventValue": 1,
@@ -42,7 +43,7 @@ select_rows = {
 }
 if "events_action" not in st.session_state:
     st.session_state.events_action = get_unique_values_from_columns(
-        "video", "eventAction"
+        "video-new", "eventAction"
     )
 
 with st.container():
@@ -60,7 +61,7 @@ with st.container():
             date_from_input = st.date_input(
                 "Select from date",
                 min_value=datetime.datetime(2021, 1, 1),
-                value=datetime.datetime(2022, 1, 1),
+                value=datetime.datetime(2022, 6, 28),
             )
             date_from_input = datetime.datetime.combine(
                 date_from_input, datetime.time.min
@@ -69,8 +70,8 @@ with st.container():
         with col2:
             date_to_input = st.date_input(
                 "Select to date",
-                max_value=datetime.datetime(2022, 3, 1),
-                value=datetime.datetime(2022, 3, 1),
+                max_value=datetime.datetime(2022, 7, 1),
+                value=datetime.datetime(2022, 6, 29),
             )
             date_to_input = datetime.datetime.combine(date_to_input, datetime.time.min)
 
@@ -89,7 +90,7 @@ query = {
 
 agg = {"totalEvents": "sum", "uniqueEvents": "sum", "eventValue": "sum"}
 
-df = get_data_from_collection("video", query, select_rows)
+df = get_data_from_collection("video-new", query, select_rows)
 
 df["day"] = df["date"].dt.isocalendar().day
 df["week"] = df["date"].dt.isocalendar().week
@@ -165,3 +166,4 @@ with st.container():
             # source = source.groupby(['date', 'hour', 'eventAction']).agg(agg)
             chart = get_chart(source, e, "date", "uniqueEvents")
             st.altair_chart(chart, use_container_width=True)
+
