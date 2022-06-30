@@ -1,12 +1,21 @@
 import datetime
+from turtle import width
+
 import streamlit as st
 from st_aggrid import AgGrid
 import pandas as pd
 import numpy as np
 from data.get_data import get_unique_values_from_columns, get_data_from_collection
-from data.prepare_data import prepare_date_columns, group_data, aggregate_data
+from data.prepare_data import prepare_date_columns, group_data,\
+    aggregate_data, prepare_video_events_counted_dfs
 from apps.ui_elements.visualisations.charts import get_chart
-from data.prepare_data import top_events
+from data.prepare_data import (
+    top_events,
+    prepare_video_events_df_list,
+    prepare_video_events_df_dict,
+    prepare_seek_time_df,
+    prepare_date_columns,
+)
 from apps.ui_elements.agrid.agrid_video import get_table, set_ggrid_options
 from settings import AGRID_OPTIONSS
 
@@ -92,10 +101,12 @@ query = {
 agg = {"totalEvents": "sum", "uniqueEvents": "sum", "eventValue": "sum"}
 
 df = get_data_from_collection("video-new", query, select_rows)
+df = prepare_date_columns(df)
+dict_of_counted_events_dfs = prepare_video_events_counted_dfs(df)
 
-df["day"] = df["date"].dt.isocalendar().day
-df["week"] = df["date"].dt.isocalendar().week
-df["month"] = df["date"].dt.month
+
+
+
 grid_df = df.copy()
 if time_frame == "weekly":
     grid_df = df.groupby(["eventAction", "week", "name"]).agg(agg)
@@ -116,12 +127,16 @@ with st.container():
     with st.container() as f:
         st.spinner("Displaying results...")
         st.header("Result: ")
+        st.write('This is the result of the counted event actions by selected period of time:')
+        for key, value in dict_of_counted_events_dfs.items():
+            value.name = key
+        st.dataframe(pd.DataFrame(dict_of_counted_events_dfs), width=1200)
         grid_response = get_table(df, gridOptions)
 
         # Infer basic colDefs from dataframe types
     for e in events_action_selector:
         data = (
-            top_events(df[df["eventAction"] == e], e, date_from_input, date_to_input)
+            top_events(df[df["eventAction"] == e], e)
             .sort_values(["eventValue"], ascending=False)
             .reset_index(drop=True)
         )
