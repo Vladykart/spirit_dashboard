@@ -61,7 +61,7 @@ def prepare_video_events_counted_dfs(video_df):
     for event_action in video_df["eventAction"].unique():
         dict_of_counted_events_dfs[event_action] = (
             video_df[video_df["eventAction"] == event_action]
-            .groupby(by=["name"])['name']
+            .groupby(by=["name"])["name"]
             .count()
         )
     return dict_of_counted_events_dfs
