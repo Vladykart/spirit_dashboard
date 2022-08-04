@@ -80,7 +80,7 @@ with st.container():
         with col2:
             date_to_input = st.date_input(
                 "Select to date",
-                max_value=datetime.datetime(2022, 7, 1),
+
                 value=datetime.datetime(2022, 6, 29),
             )
             date_to_input = datetime.datetime.combine(date_to_input, datetime.time.min)
@@ -100,7 +100,7 @@ query = {
 
 agg = {"totalEvents": "sum", "uniqueEvents": "sum", "eventValue": "sum"}
 
-df = get_data_from_collection("video-new", query, select_rows)
+df = get_data_from_collection("video", query, select_rows)
 df = prepare_date_columns(df)
 dict_of_counted_events_dfs = prepare_video_events_counted_dfs(df)
 
